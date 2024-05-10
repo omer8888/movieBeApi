@@ -1,4 +1,4 @@
-package Startup.example.Startup;
+package Startup.example.Startup.Reviews;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

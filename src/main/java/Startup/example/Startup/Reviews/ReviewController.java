@@ -1,4 +1,4 @@
-package Startup.example.Startup;
+package Startup.example.Startup.Reviews;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

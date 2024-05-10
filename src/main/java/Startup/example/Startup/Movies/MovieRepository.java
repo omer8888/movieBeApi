@@ -1,4 +1,4 @@
-package Startup.example.Startup;
+package Startup.example.Startup.Movies;
 
 import org.bson.types.ObjectId;
 import org.springframework.data.mongodb.repository.MongoRepository;

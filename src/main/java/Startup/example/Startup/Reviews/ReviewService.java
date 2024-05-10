@@ -1,5 +1,7 @@
-package Startup.example.Startup;
+package Startup.example.Startup.Reviews;
 
+import Startup.example.Startup.Movies.Movie;
+import Startup.example.Startup.Movies.MovieService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;

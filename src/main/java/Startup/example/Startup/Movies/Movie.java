@@ -1,5 +1,6 @@
-package Startup.example.Startup;
+package Startup.example.Startup.Movies;
 
+import Startup.example.Startup.Reviews.Review;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -8,7 +9,6 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.DocumentReference;
 
-import javax.annotation.processing.Generated;
 import java.util.List;
 
 @Document(collection = "movies")
