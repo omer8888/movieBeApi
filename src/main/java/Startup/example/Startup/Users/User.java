@@ -1,4 +1,4 @@
-package Startup.example.Startup.Reviews;
+package Startup.example.Startup.Users;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,17 +7,20 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection="reviews")
+
+@Document(collection = "users")
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Review {
+public class User {
+
     @Id
     private ObjectId id;
-
-    private String body;
-
-    public Review(String body) {
-        this.body = body;
-    }
+    private String accountId;
+    private String name;
+    private String lastName;
+    private String email;
+    private String password;
+    private String created;
+    private String lastUpdated;
 }
