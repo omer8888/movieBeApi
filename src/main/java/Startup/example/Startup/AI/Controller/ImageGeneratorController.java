@@ -26,5 +26,22 @@ public class ImageGeneratorController {
         return null;
     }
 
+    @PostMapping("/generate-image-by-prompt")
+    public String generateImage(@RequestParam String prompt) {
+        ImageRequest imageRequest = new ImageRequest("dall-e-3", null, 1, "1024x1024");
+        imageRequest.setPrompt("Generate a highly realistic tattoo of " + prompt
+                + " The design should be suitable for a professional tattoo,"
+                + " Ensure the tattoo has intricate details and shading to enhance the realism and lifelike appearance,"
+                + " on the bottom left of the generated image add black watermark that says: AI TATTOO");
+
+        ImageResponse imageResponse = restTemplate.postForObject(OPEN_AI_URL, imageRequest, ImageResponse.class);
+
+        if (imageResponse != null && !imageResponse.getData().isEmpty()) {
+            return imageResponse.getData().get(0).get("url");
+        }
+
+        return null;
+    }
+
 
 }
