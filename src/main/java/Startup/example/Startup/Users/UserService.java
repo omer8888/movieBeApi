@@ -12,12 +12,18 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    public List<User> getAllUsers(){
-        return  userRepository.findAll();
+    public List<User> getAllUsers() {
+        return userRepository.findAll();
     }
 
     public Optional<User> getSingleUser(String accountId) {
         return userRepository.findUserByAccountId(accountId);
     }
 
+    public Optional<User> createNewUser(User user) {
+        if (userRepository.findUserByAccountId(user.getAccountId()).isEmpty()) {
+            userRepository.save(user);
+        }
+        return Optional.of(user);
+    }
 }

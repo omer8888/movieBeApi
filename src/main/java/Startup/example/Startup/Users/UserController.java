@@ -25,4 +25,9 @@ public class UserController {
     private ResponseEntity<Optional<User>> getSingleUser(@PathVariable String accountId) {
         return new ResponseEntity<>(userService.getSingleUser(accountId), HttpStatus.OK);
     }
+
+    @PostMapping("/create")
+    private ResponseEntity<Optional<User>> Create(@RequestBody User user){
+        return new ResponseEntity<>(userService.createNewUser(user), HttpStatus.OK);
+    }
 }
