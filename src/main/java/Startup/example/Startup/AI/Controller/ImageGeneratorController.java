@@ -32,7 +32,8 @@ public class ImageGeneratorController {
         imageRequest.setPrompt("Generate a highly realistic tattoo of " + prompt
                 + " The design should be suitable for a professional tattoo,"
                 + " Ensure the tattoo has intricate details and shading to enhance the realism and lifelike appearance,"
-                + " on the bottom left of the generated image add black watermark that says: AI TATTOO");
+                + " Always add a nice small watermark with the company name 'AI TATTOO' on the bottom left of the generated image."
+                + "The watermark should be in black and say 'AI TATTOO'.");
 
         ImageResponse imageResponse = restTemplate.postForObject(OPEN_AI_URL, imageRequest, ImageResponse.class);
 
