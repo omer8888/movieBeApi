@@ -1,5 +1,7 @@
 package Startup.example.Startup.Users;
 
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,4 +29,9 @@ public class UserService {
         return Optional.of(user);
     }
 
+
+    public boolean isEligibleToLogin(String accountId) {
+        Optional<User> userOpt = this.getSingleUser(accountId);
+        return userOpt.isPresent();
+    }
 }
