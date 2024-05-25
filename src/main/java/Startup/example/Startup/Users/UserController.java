@@ -1,11 +1,13 @@
 package Startup.example.Startup.Users;
 
+import Startup.example.Startup.Users.login.JwtService;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import io.jsonwebtoken.Claims;
 
 
 import java.util.List;
@@ -18,6 +20,9 @@ public class UserController {
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private JwtService jwtService;
 
     @GetMapping("/showAll")
     private ResponseEntity<List<User>> getAllUsers() {
@@ -61,7 +66,8 @@ public class UserController {
     }
 
     private void setLoginSessionCookie(String accountId, HttpServletResponse response) {
-        Cookie cookie = new Cookie("ATUS", accountId);
+        String jwt = jwtService.generateToken(accountId); // Generate a JWT
+        Cookie cookie = new Cookie("ATUS", jwt);
         cookie.setHttpOnly(true);
         cookie.setPath("/");
         cookie.setMaxAge(60 * 60); // 1 hour
@@ -81,5 +87,15 @@ public class UserController {
     private ResponseEntity<Optional<User>> logoutUser(HttpServletResponse response) {
         removeLoginSessionCookie(response);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping("/validate")
+    public ResponseEntity<Boolean> validateToken(@CookieValue(value = "ATUS", defaultValue = "") String token) {
+        Claims claims = jwtService.validateToken(token);
+        if (claims != null) {
+            return ResponseEntity.ok(true);
+        } else {
+            return ResponseEntity.ok(false);
+        }
     }
 }
