@@ -67,4 +67,19 @@ public class UserController {
         cookie.setMaxAge(60 * 60); // 1 hour
         response.addCookie(cookie);
     }
+
+    private void removeLoginSessionCookie(HttpServletResponse response) {
+        Cookie cookie = new Cookie("ATUS", "");
+        cookie.setHttpOnly(true);
+        cookie.setPath("/");
+        cookie.setMaxAge(0); // Setting Max-Age to 0 to delete the cookie
+        response.addCookie(cookie);
+    }
+
+
+    @PostMapping("/logout")
+    private ResponseEntity<Optional<User>> logoutUser(HttpServletResponse response) {
+        removeLoginSessionCookie(response);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
 }
