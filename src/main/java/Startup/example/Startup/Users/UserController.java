@@ -42,7 +42,22 @@ public class UserController {
             return new ResponseEntity<>(user, HttpStatus.OK);
         }
 
-        return new ResponseEntity<>(null, HttpStatus.UNAUTHORIZED);
+        return new ResponseEntity<>(user, HttpStatus.OK);
+    }
+
+    @PostMapping("/signupOrLogin")
+    public ResponseEntity<Optional<User>> create(@RequestBody User requestUser, HttpServletResponse response) {
+        Optional<User> existingUser = userService.getSingleUser(requestUser.getAccountId());
+
+        // Creating new user
+        if (existingUser.isEmpty()) {
+            existingUser = userService.createNewUser(requestUser);
+        }
+
+        // Logging in
+        setLoginSessionCookie(requestUser.getAccountId(), response);
+
+        return new ResponseEntity<>(existingUser, HttpStatus.OK);
     }
 
     private void setLoginSessionCookie(String accountId, HttpServletResponse response) {
