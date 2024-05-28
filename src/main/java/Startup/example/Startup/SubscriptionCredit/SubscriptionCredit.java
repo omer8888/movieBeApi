@@ -7,6 +7,8 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.Date;
+
 
 @Document(collection = "subscription_credit")
 @Data
@@ -20,5 +22,6 @@ public class SubscriptionCredit {
     private int subscriptionId;
     private int productId;
     private int creditAmount;
-    private String lastUpdated;
+    private Date lastUpdated;
+
 }
