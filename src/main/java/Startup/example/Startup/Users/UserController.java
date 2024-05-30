@@ -90,12 +90,13 @@ public class UserController {
     }
 
     @GetMapping("/validate")
-    public ResponseEntity<Boolean> validateToken(@CookieValue(value = "ATUS", defaultValue = "") String token) {
+    public ResponseEntity<String> validateToken(@CookieValue(value = "ATUS", defaultValue = "") String token) {
         Claims claims = jwtService.validateToken(token);
         if (claims != null) {
-            return ResponseEntity.ok(true);
+            return ResponseEntity.ok(claims.getSubject());
         } else {
-            return ResponseEntity.ok(false);
+            return ResponseEntity.ok(null);
         }
     }
+
 }
