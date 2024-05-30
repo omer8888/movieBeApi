@@ -32,4 +32,9 @@ public class SubscriptionCreditController {
         return new ResponseEntity<>(subscriptionCreditService.createNewSubscriptionCredit(subscriptionCredit), HttpStatus.OK);
     }
 
+    @GetMapping("/reduce/{accountId}")
+    private ResponseEntity<SubscriptionCredit> Reduce(@PathVariable String accountId) {
+        return new ResponseEntity<>(subscriptionCreditService.reduceCreditByAccountId(accountId), HttpStatus.OK);
+    }
+
 }

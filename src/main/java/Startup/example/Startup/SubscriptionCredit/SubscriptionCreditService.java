@@ -1,7 +1,5 @@
 package Startup.example.Startup.SubscriptionCredit;
 
-import Startup.example.Startup.Users.User;
-import Startup.example.Startup.Users.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,6 +26,28 @@ public class SubscriptionCreditService {
         }
         return Optional.of(subscriptionCredit);
     }
+
+
+    public SubscriptionCredit reduceCreditByAccountId(String accountId) {
+        Optional<SubscriptionCredit> subscriptionCreditOptional = subscriptionCreditRepository.findSubscriptionCreditByAccountId(accountId);
+        SubscriptionCredit subscriptionCredit = null;
+        if (subscriptionCreditOptional.isPresent()) {
+            subscriptionCredit = subscriptionCreditOptional.get();
+
+            int currentCredit = subscriptionCredit.getCreditAmount();
+            if (currentCredit > 0) {
+                subscriptionCredit.setCreditAmount(currentCredit - 1);
+                subscriptionCreditRepository.save(subscriptionCredit);
+            } else {
+                // Optionally handle the case when credit is zero or less
+                System.out.println("No credits left to reduce.");
+            }
+        } else {
+            System.out.println("No subscription credit found in SubscriptionCredit table for account ID: " + accountId);
+        }
+        return subscriptionCredit;
+    }
+
 
 
 }
