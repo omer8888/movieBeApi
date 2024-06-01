@@ -90,12 +90,14 @@ public class UserController {
     }
 
     @GetMapping("/validate")
-    public ResponseEntity<String> validateToken(@CookieValue(value = "ATUS", defaultValue = "") String token) {
+    public ResponseEntity<Optional<User>> validateToken(@CookieValue(value = "ATUS", defaultValue = "") String token) {
         Claims claims = jwtService.validateToken(token);
         if (claims != null) {
-            return ResponseEntity.ok(claims.getSubject());
+            String accountId = claims.getSubject(); // Extract account ID from claims
+            Optional<User> user = userService.getSingleUser(accountId);
+            return new ResponseEntity<>(user, HttpStatus.OK);
         } else {
-            return ResponseEntity.ok(null);
+            return ResponseEntity.ok(Optional.empty());
         }
     }
 
