@@ -1,5 +1,6 @@
 package Startup.example.Startup.Payment;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.http.HttpStatus;
@@ -10,10 +11,15 @@ import java.util.Map;
 @RequestMapping("/api")
 public class PayPalController {
 
+    @Autowired
+    PostPurchaseService postPurchaseService;
+
     @PostMapping("/paypal-transaction-complete")
     public ResponseEntity<?> completeTransaction(@RequestBody Map<String, String> data) {
         String orderID = data.get("orderID");
         String payerID = data.get("payerID");
+        String productId = data.get("productId");
+        String accountId = data.get("accountId");
 
         // Capture the payment
         try {
@@ -21,7 +27,7 @@ public class PayPalController {
             boolean isPaymentCaptured = capturePayment(orderID, payerID);
             if (isPaymentCaptured) {
                 // Handle successful payment
-                // TODO: add credit to the user, and redirect to generate
+                postPurchaseService.provideBenefits(accountId, Integer.parseInt(productId));
                 // TODO: send TY email ?
                 return ResponseEntity.ok("Payment captured successfully.");
             }

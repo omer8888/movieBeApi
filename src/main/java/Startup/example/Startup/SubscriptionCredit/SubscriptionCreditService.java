@@ -49,5 +49,17 @@ public class SubscriptionCreditService {
     }
 
 
+    public void provideCredit(String accountId, int creditAmount) {
+        Optional<SubscriptionCredit> subscriptionCreditOptional = subscriptionCreditRepository.findSubscriptionCreditByAccountId(accountId);
+        SubscriptionCredit subscriptionCredit = null;
+        if (subscriptionCreditOptional.isPresent()) {
+            subscriptionCredit = subscriptionCreditOptional.get();
 
+            int currentCredit = subscriptionCredit.getCreditAmount();
+            subscriptionCredit.setCreditAmount(currentCredit + creditAmount);
+            subscriptionCreditRepository.save(subscriptionCredit);
+        } else {
+            System.out.println("No subscription credit found in SubscriptionCredit table for account ID: " + accountId);
+        }
+    }
 }
