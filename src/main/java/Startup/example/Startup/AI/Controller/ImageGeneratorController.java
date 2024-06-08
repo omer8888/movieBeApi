@@ -27,9 +27,18 @@ public class ImageGeneratorController {
     }
 
     @PostMapping("/generate-image-by-prompt")
-    public String generateImage(@RequestParam String prompt) {
+    public String generateImage(@RequestParam String prompt, @RequestParam String bodypart, @RequestParam String colorStyle, @RequestParam String gender) {
+
+        String genderText = bodypart==null?"":"my gender is : "+gender;
+        String colorStyleText = colorStyle==null?"":"make sure the tattoo color is : "+colorStyle;
+        String bodypartText = bodypart==null?"":"make sure the tattoo placed on the body part which is :"+bodypart;
+
         ImageRequest imageRequest = new ImageRequest("dall-e-3", null, 1, "1024x1024");
-        imageRequest.setPrompt("Generate a highly realistic tattoo of " + prompt
+        imageRequest.setPrompt("Generate a highly realistic tattoo of "
+                + prompt
+                + bodypartText
+                + colorStyleText
+                + genderText
                 + " The design should be suitable for a professional tattoo,"
                 + " Ensure the tattoo has intricate details and shading to enhance the realism and lifelike appearance,"
                 + " Always add a nice and very small watermark with the company name 'Made by Omer AI TATTOO' on the bottom left of the generated image."
