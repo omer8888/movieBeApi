@@ -2,9 +2,17 @@ package Startup.example.Startup.AI.Controller;
 
 import Startup.example.Startup.AI.ImageRequest;
 import Startup.example.Startup.AI.ImageResponse;
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.URL;
 
 @CrossOrigin("http://localhost:3000")
 @RestController
@@ -13,7 +21,6 @@ public class ImageGeneratorController {
 
     @Autowired
     private RestTemplate restTemplate;
-
 
     private static final String OPEN_AI_URL = "https://api.openai.com/v1/images/generations";
 
@@ -27,7 +34,7 @@ public class ImageGeneratorController {
     }
 
     @PostMapping("/generate-image-by-prompt")
-    public String generateImage(@RequestParam String prompt, @RequestParam String bodypart, @RequestParam String colorStyle, @RequestParam String gender) {
+    public ResponseEntity<String> generateImage(@RequestParam String prompt, @RequestParam String bodypart, @RequestParam String colorStyle, @RequestParam String gender) {
 
         String genderText = bodypart==null?"":"my gender is : "+gender;
         String colorStyleText = colorStyle==null?"":"make sure the tattoo color is : "+colorStyle;
@@ -47,11 +54,27 @@ public class ImageGeneratorController {
         ImageResponse imageResponse = restTemplate.postForObject(OPEN_AI_URL, imageRequest, ImageResponse.class);
 
         if (imageResponse != null && !imageResponse.getData().isEmpty()) {
-            return imageResponse.getData().get(0).get("url");
+            String imageUrl = imageResponse.getData().get(0).get("url");
+            return downloadAndSaveImage(imageUrl);
         }
 
-        return null;
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to generate image");
     }
 
+    //TODO: move to service
+    private ResponseEntity<String> downloadAndSaveImage(String imageUrl) {
+        try {
+            byte[] imageBytes = IOUtils.toByteArray(new URL(imageUrl));
 
+            // TODO upload to server instead
+            String filePath = "src/main/java/Startup/example/Startup/results/image.png";
+            try (OutputStream outputStream = new FileOutputStream(filePath)) {
+                outputStream.write(imageBytes);
+            }
+            //TODO: change the return url to the server new image url
+            return new ResponseEntity<>(imageUrl, HttpStatus.OK);
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Failed to download and save image");
+        }
+    }
 }
