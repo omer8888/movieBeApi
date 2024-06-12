@@ -1,8 +1,14 @@
 package Startup.example.Startup.images;
 
+import Startup.example.Startup.AwsS3.S3Service;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.Base64;
 
 @CrossOrigin("http://localhost:3000")
@@ -10,11 +16,16 @@ import java.util.Base64;
 @RestController
 public class ImageController {
 
+
+    private File convertMultiPartToFile(MultipartFile file) throws IOException {
+        File convFile = new File(file.getOriginalFilename());
+        file.transferTo(convFile);
+        return convFile;
+    }
+
     @PostMapping("/image-to-base64")
     public ResponseEntity<String> imageToBase64(@RequestBody String imageUrl) {
         try {
-            //TODO: change the hardcodded url to my server image url
-            imageUrl = "https://user-uploads.perchance.org/file/caf4c7e03a056269513bbe5ab1da1842.jpeg";
             RestTemplate restTemplate = new RestTemplate();
             byte[] imageBytes = restTemplate.getForObject(imageUrl, byte[].class);
             if (imageBytes == null) {
