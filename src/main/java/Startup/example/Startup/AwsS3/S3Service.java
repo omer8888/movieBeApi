@@ -1,5 +1,6 @@
 package Startup.example.Startup.AwsS3;
 
+import org.apache.commons.io.IOUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -8,13 +9,11 @@ import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 import software.amazon.awssdk.services.s3.model.S3Exception;
-import software.amazon.awssdk.services.s3.presigner.S3Presigner;
-import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
-
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URL;
-import java.time.Duration;
 
 @Service
 public class S3Service {
@@ -39,12 +38,28 @@ public class S3Service {
                 .build();
     }
 
-    private S3Presigner getS3Presigner() {
-        AwsBasicCredentials awsCreds = AwsBasicCredentials.create(accessKey, secretKey);
-        return S3Presigner.builder()
-                .region(Region.of(region))
-                .credentialsProvider(StaticCredentialsProvider.create(awsCreds))
-                .build();
+    public String uploadImageToS3Bucket(String accountId, String imageUrl) {
+        try {
+            byte[] imageBytes = IOUtils.toByteArray(new URL(imageUrl));
+
+            // Create a temporary file
+            File tempFile = File.createTempFile("AI-Tattoo-Generated-image_", ".png");
+            try (OutputStream outputStream = new FileOutputStream(tempFile)) {
+                outputStream.write(imageBytes);
+            }
+
+            // Upload the file to S3 and get the URL
+            String s3Url = "https://ai-tattoo-s3-bucket.s3.amazonaws.com/" + this.uploadFile(accountId, tempFile);
+
+            // Delete the temporary file
+            tempFile.delete();
+
+            // Return the S3 URL
+            return s3Url;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
     public String uploadFile(String userId, File file) {
@@ -65,17 +80,5 @@ public class S3Service {
             throw new RuntimeException("Error uploading file to S3: " + e.getMessage());
         }
         return key;
-    }
-
-    public String getPresignedUrl(String key) {
-        S3Presigner presigner = getS3Presigner();
-        GetObjectPresignRequest getObjectPresignRequest =
-                GetObjectPresignRequest.builder()
-                        .signatureDuration(Duration.ofMinutes(10))
-                        .getObjectRequest(b -> b.bucket(bucketName).key(key))
-                        .build();
-
-        URL url = presigner.presignGetObject(getObjectPresignRequest).url();
-        return url.toString();
     }
 }
