@@ -39,11 +39,11 @@ public class ImageGeneratorController {
                                                 @RequestParam String colorStyle,
                                                 @RequestParam String gender) {
 
-        String genderText = bodypart == null ? "" : "my gender is : " + gender;
+        String genderText = gender == null ? "" : "my gender is : " + gender;
         String colorStyleText = colorStyle == null ? "" : "make sure the tattoo color is : " + colorStyle;
         String bodypartText =
                 (bodypart == null || bodypart=="sketch") ?
-                        "tattoo show be a professional sketch" : bodypart;
+                        "tattoo show be a professional sketch" : "make sure the tatto is placed on the " + bodypart;
 
         ImageRequest imageRequest = new ImageRequest("dall-e-3", null, 1, "1024x1024");
         imageRequest.setPrompt("Generate a highly realistic tattoo of "
