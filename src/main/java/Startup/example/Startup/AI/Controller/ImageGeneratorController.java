@@ -42,8 +42,8 @@ public class ImageGeneratorController {
         String genderText = gender == null ? "" : "my gender is : " + gender;
         String colorStyleText = colorStyle == null ? "" : "make sure the tattoo color is : " + colorStyle;
         String bodypartText =
-                (bodypart == null || bodypart=="sketch") ?
-                        "tattoo show be a professional sketch" : "make sure the tatto is placed on the " + bodypart;
+                (bodypart == null || bodypart == "sketch") ?
+                        "tattoo show be a professional sketch" : "make sure the tattoo is placed on the " + bodypart;
 
         ImageRequest imageRequest = new ImageRequest("dall-e-3", null, 1, "1024x1024");
         imageRequest.setPrompt("Generate a highly realistic tattoo of "
@@ -51,9 +51,9 @@ public class ImageGeneratorController {
                 + bodypartText
                 + colorStyleText
                 + genderText
-                + " The design should be suitable for a professional tattoo,"
-                + " Ensure the tattoo has intricate details and shading to enhance the realism and lifelike appearance,"
-                + " Always add a nice and very small watermark with the company name 'Made by Omer AI TATTOO' on the bottom left of the generated image."
+                + " professional tattoo realistic digital painting, colorful and detailed, ink work"
+                + " realism and lifelike appearance, high quality"
+                + " Always mall size watermark bottom right: with the company name 'Made by Omer AI TATTOO' on the bottom left of the generated tattoo."
                 + "The watermark should be in black and say 'Made by Omer AI TATTOO'.");
 
         ImageResponse imageResponse = restTemplate.postForObject(OPEN_AI_URL, imageRequest, ImageResponse.class);
