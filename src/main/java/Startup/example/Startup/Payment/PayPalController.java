@@ -16,18 +16,21 @@ public class PayPalController {
 
     @PostMapping("/paypal-transaction-complete")
     public ResponseEntity<?> completeTransaction(@RequestBody Map<String, String> data) {
-        String orderID = data.get("orderID");
+        String orderID = "mock";//data.get("orderID");
         String payerID = data.get("payerID");
         String productId = data.get("productId");
         String accountId = data.get("accountId");
+        String price = data.get("price");
 
         // Capture the payment
         try {
-            // Assuming you have a method to handle payment capture
             boolean isPaymentCaptured = capturePayment(orderID, payerID);
             if (isPaymentCaptured) {
                 // Handle successful payment
                 postPurchaseService.provideBenefits(accountId, Integer.parseInt(productId));
+                postPurchaseService.addPurchaseDetailsToDb(accountId,orderID,Integer.parseInt(price), Integer.parseInt(productId));
+
+                // TODO: add success transaction to db
                 // TODO: send TY email ?
                 return ResponseEntity.ok("Payment captured successfully.");
             }
@@ -36,6 +39,7 @@ public class PayPalController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Payment capture failed.");
         }
 
+        // TODO: add failed transaction to db
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid payment details.");
     }
 
