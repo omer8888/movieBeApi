@@ -7,6 +7,8 @@ import org.bson.types.ObjectId;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDateTime;
+
 @Document(collection = "transactions")
 @Data
 @AllArgsConstructor
@@ -16,9 +18,11 @@ public class Transaction {
     @Id
     private ObjectId id;
     private String accountId;
+    private String payerId;
     private String orderId;
-    private Integer price;
+    private String status;
+    private Double price;
     private Integer productId;  // Added productId as an integer
-    private String created;
-    private String lastUpdated;
+    private LocalDateTime created;
+    private LocalDateTime lastUpdated;
 }

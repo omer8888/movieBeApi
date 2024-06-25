@@ -16,19 +16,21 @@ public class PayPalController {
 
     @PostMapping("/paypal-transaction-complete")
     public ResponseEntity<?> completeTransaction(@RequestBody Map<String, String> data) {
-        String orderID = "mock";//data.get("orderID");
-        String payerID = data.get("payerID");
+        String orderId = data.get("subscriptionID");
+        String status = data.get("status");
+        String payerId = data.get("payerId");
+        String planType = data.get("planType");
         String productId = data.get("productId");
         String accountId = data.get("accountId");
         String price = data.get("price");
 
         // Capture the payment
         try {
-            boolean isPaymentCaptured = capturePayment(orderID, payerID);
+            boolean isPaymentCaptured = capturePayment(orderId, payerId);
             if (isPaymentCaptured) {
                 // Handle successful payment
                 postPurchaseService.provideBenefits(accountId, Integer.parseInt(productId));
-                postPurchaseService.addPurchaseDetailsToDb(accountId,orderID,Integer.parseInt(price), Integer.parseInt(productId));
+                postPurchaseService.addPurchaseDetailsToDb(accountId,payerId, orderId,status,Double.parseDouble(price), Integer.parseInt(productId));
 
                 // TODO: add success transaction to db
                 // TODO: send TY email ?
