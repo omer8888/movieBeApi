@@ -31,7 +31,7 @@ public class PayPalController {
                 // Handle successful payment
                 postPurchaseService.provideBenefits(accountId, Integer.parseInt(productId));
                 postPurchaseService.addPurchaseDetailsToDb(accountId,payerId, orderId,status,Double.parseDouble(price), Integer.parseInt(productId));
-
+                postPurchaseService.addSubscriptionToDb(accountId,"annual", orderId,status, Integer.parseInt(productId));
                 // TODO: add success transaction to db
                 // TODO: send TY email ?
                 return ResponseEntity.ok("Payment captured successfully.");

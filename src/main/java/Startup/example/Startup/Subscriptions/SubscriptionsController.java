@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @CrossOrigin("http://localhost:3000")
 @RestController
-@RequestMapping("api/v1/transactions")
+@RequestMapping("api/v1/subscriptions")
 public class SubscriptionsController {
 
     @Autowired

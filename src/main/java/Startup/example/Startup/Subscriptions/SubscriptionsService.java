@@ -10,19 +10,19 @@ import java.util.Optional;
 public class SubscriptionsService {
 
     @Autowired
-    private SubscriptionsRepository TransactionsRepository;
+    private SubscriptionsRepository subscriptionsRepository;
 
     public List<Subscription> getAllSubscriptions() {
-        return TransactionsRepository.findAll();
+        return subscriptionsRepository.findAll();
     }
 
     public Optional<Subscription> getSingleSubscription(String accountId) {
-        return TransactionsRepository.findSubscriptionByAccountId(accountId);
+        return subscriptionsRepository.findSubscriptionByAccountId(accountId);
     }
 
     public Optional<Subscription> createNewSubscription(Subscription subscription) {
         //on new Transaction saves to db
-        TransactionsRepository.save(subscription);
+        subscriptionsRepository.save(subscription);
 
         return Optional.of(subscription);
     }
