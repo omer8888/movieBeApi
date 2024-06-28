@@ -34,7 +34,9 @@ public class UserService {
         //on new user saves to db
         if (userRepository.findUserByAccountId(user.getAccountId()).isEmpty()) {
             userRepository.save(user);
-            SubscriptionCredit subscriptionCredit = new SubscriptionCredit(null,user.getAccountId(),-1,1,1,new Date());
+
+            // free 2 credit for new user TODO: add FF for that
+            SubscriptionCredit subscriptionCredit = new SubscriptionCredit(null,user.getAccountId(),-1,1,2,new Date());
             subscriptionCreditRepository.save(subscriptionCredit);
         }
         return Optional.of(user);
