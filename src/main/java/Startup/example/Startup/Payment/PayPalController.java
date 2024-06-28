@@ -20,7 +20,8 @@ public class PayPalController {
         String status = data.get("status");
         String payerId = data.get("payerId");
         String planType = data.get("planType");
-        String productId = data.get("productId");
+        int productId = Integer.parseInt(data.get("productId"));
+        String billingMode = null;
         String accountId = data.get("accountId");
         String price = data.get("price");
 
@@ -29,9 +30,9 @@ public class PayPalController {
             boolean isPaymentCaptured = capturePayment(orderId, payerId);
             if (isPaymentCaptured) {
                 // Handle successful payment
-                postPurchaseService.provideBenefits(accountId, Integer.parseInt(productId));
-                postPurchaseService.addPurchaseDetailsToDb(accountId,payerId, orderId,status,Double.parseDouble(price), Integer.parseInt(productId));
-                postPurchaseService.addSubscriptionToDb(accountId,"annual", orderId,status, Integer.parseInt(productId));
+                postPurchaseService.provideBenefits(accountId, productId);
+                postPurchaseService.addPurchaseDetailsToDb(accountId,payerId, orderId,status,Double.parseDouble(price), productId);
+                postPurchaseService.addSubscriptionToDb(accountId,planType, orderId,status, productId);
                 // TODO: add success transaction to db
                 // TODO: send TY email ?
                 return ResponseEntity.ok("Payment captured successfully.");

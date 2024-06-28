@@ -23,5 +23,6 @@ public class Subscription {
     private Integer productId;
     private String billingMode;
     private LocalDateTime created;
+    private LocalDateTime nextBillingDate;
     private LocalDateTime lastUpdated;
 }
