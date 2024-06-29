@@ -39,24 +39,25 @@ public class ImageGeneratorController {
                                                 @RequestParam String colorStyle,
                                                 @RequestParam String gender) {
 
-        String genderText = gender == null ? "" : "my gender is : " + gender;
-        String colorStyleText = colorStyle == null ? "" : "make sure the tattoo color is : " + colorStyle;
+        String genderText = gender == null ? "" : " my gender is " + gender;
+        String colorStyleText = colorStyle == null ? "" : " make sure the tattoo color is " + colorStyle;
         String bodypartText =
                 (bodypart == null || bodypart == "sketch") ?
-                        "tattoo show be a professional sketch" : "make sure the tattoo is placed on the " + bodypart;
+                        "tattoo show be a professional sketch" : "Tattoo is placed on the " + bodypart;
 
         ImageRequest imageRequest = new ImageRequest("dall-e-3", null, 1, "1024x1024");
         imageRequest.setPrompt(""
                 + prompt
+                + " Realistic and intricate tattoo ink design, feels like real ink, dosent looks like printed image, red skin around the ink, ultra-detailed, intricate linework, precise shading, captivating designs, high quality, artistic, creative, detailed, realistic ink work, realistic textures, professional shading, best quality, captivating, detailed linework, intense red accents, fresh tattoo, professional artistic style"
+                + " small size watermark bottom right: Made by Omer AI TATTOO."
                 + bodypartText
                 + colorStyleText
                 + genderText
-                + " Realistic tattoo design generator, intricate and detailed ink work, feels like real ink tattoo and not image, with red near the tattoo like its still fresh made, feels like real ink tattoo and not image,, ultra-detailed, realistic ink work, monochromatic, artistic, creative, intricate linework, precise shading, captivating designs, professional, inviting ambiance, high quality, intricate details, sleek and modern aesthetic"
-                + " Always mall size watermark bottom right: with the company name 'Made by Omer AI TATTOO' on the bottom left of the generated tattoo."
-                + "The watermark should be in black and say 'Made by Omer AI TATTOO'.");
+        );
 
         ImageResponse imageResponse = restTemplate.postForObject(OPEN_AI_URL, imageRequest, ImageResponse.class);
 
+        //convert open ai url to s3 url
         if (imageResponse != null && !imageResponse.getData().isEmpty()) {
             String imageUrl = imageResponse.getData().get(0).get("url");
             String S3url = s3Service.uploadImageToS3Bucket(String.valueOf(isLoggedIn), imageUrl);
