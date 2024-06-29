@@ -46,13 +46,12 @@ public class ImageGeneratorController {
                         "tattoo show be a professional sketch" : "make sure the tattoo is placed on the " + bodypart;
 
         ImageRequest imageRequest = new ImageRequest("dall-e-3", null, 1, "1024x1024");
-        imageRequest.setPrompt("Generate a highly realistic tattoo of "
+        imageRequest.setPrompt(""
                 + prompt
                 + bodypartText
                 + colorStyleText
                 + genderText
-                + " professional tattoo realistic digital painting, colorful and detailed, ink work"
-                + " realism and lifelike appearance, high quality"
+                + " Realistic tattoo design generator, intricate and detailed ink work, feels like real ink tattoo and not image, with red near the tattoo like its still fresh made, feels like real ink tattoo and not image,, ultra-detailed, realistic ink work, monochromatic, artistic, creative, intricate linework, precise shading, captivating designs, professional, inviting ambiance, high quality, intricate details, sleek and modern aesthetic"
                 + " Always mall size watermark bottom right: with the company name 'Made by Omer AI TATTOO' on the bottom left of the generated tattoo."
                 + "The watermark should be in black and say 'Made by Omer AI TATTOO'.");
 
