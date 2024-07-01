@@ -15,5 +15,5 @@ public class ImageResponse {
 
     private Date created;
 
-    private List<HashMap<String,String>> data;
+    private List<HashMap<String, String>> data;
 }
